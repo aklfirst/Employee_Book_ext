@@ -3,25 +3,40 @@ package com.example.employee_book_ext.domain;
 import java.util.Objects;
 
 public class Employee {
-    private String firstName;
-    private String lastName;
+    private final String firstName;
+    private final String lastName;
+
+    private final int department;
+    private final float salary;
 
 
-
-    public Employee(String firstName, String lastName) {
+    public Employee(String firstName, String lastName, int department, float salary) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.department = department;
+        this.salary = salary;
+        }
+
+    public int getDepartment() {
+        return department;
     }
-
-
+    public float getSalary() {
+        return salary;
+    }
 
     public String getFirstName() {
         return firstName;
     }
 
+
     public String getLastName() {
         return lastName;
     }
+
+    public String getShortName() {
+        return getFirstName().charAt(0) + "_" + getLastName();
+    }
+
 
     @Override
     public String toString() {
