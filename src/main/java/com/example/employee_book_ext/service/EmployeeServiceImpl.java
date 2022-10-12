@@ -2,11 +2,14 @@ package com.example.employee_book_ext.service;
 
 import com.example.employee_book_ext.domain.Employee;
 import com.example.employee_book_ext.exceptions.EmployeeAlreadyAddedException;
+import com.example.employee_book_ext.exceptions.EmployeeIncorrectEntryException;
 import com.example.employee_book_ext.exceptions.EmployeeNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isAlpha;
 
 @Service
 
@@ -21,9 +24,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             "Г_Каспаров", new Employee("Гарии", "Каспаров", 1, 90_000),
             "А_Елькин", new Employee("Андрей", "Елькин", 1, 190_000),
             "В_Палкин", new Employee("Василий", "Палкин", 2, 110_000),
-            "И_Иванов", new Employee("Иван1", "Иванов",  2, 120_000),
-            "И_ВторойИванов", new Employee("Иван2", "ВторойИванов", 2, 125_000),
-            "И_ТретийИванов", new Employee("Иван3", "ТретийИванов",  3, 130_000)
+            "И_Иванов", new Employee("Иван", "Иванов",  2, 120_000),
+            "И_ВторойИванов", new Employee("Ивандва", "ВторойИванов", 2, 125_000),
+            "И_ТретийИванов", new Employee("Ивантри", "ТретийИванов",  3, 130_000)
     ));
 
     @Override
@@ -51,7 +54,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public Employee add(String key, String firstName, String lastName, int department, float salary) throws EmployeeAlreadyAddedException {
+    public Employee add(String key, String firstName, String lastName, int department, float salary) throws EmployeeNotFoundException  {
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+        checkUpperCase(firstName);
+        checkUpperCase(lastName);
+        checkKey(key,firstName,lastName);
         Employee employeeToAdd = new Employee(firstName,lastName,department,salary);
         if (employees.containsKey(key)) {
             throw new EmployeeAlreadyAddedException("Такой сотрудник уже есть в базе!");
@@ -79,6 +87,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.values().stream()
                 .filter(e -> e.getDepartment() == (department))
                 .max(Comparator.comparingDouble(Employee::getSalary));
+    }
+
+    public static void checkKey(String key, String firstName, String lastName) {
+        if (!key.equals(firstName.charAt(0) + "_" + lastName)) {
+            throw new EmployeeIncorrectEntryException("Формат ключа - Первая буква Имени, затем символ '_' и Фамилия с заглавной буквы!");
+        }
+    }
+
+    public static void checkUpperCase(String name)  {
+        if (!isAlpha(name)) {
+            throw new EmployeeIncorrectEntryException("Имя и Фамилия должны начинаться с заглавной буквы и не должны содержать ничего кроме букв!");
+        }
     }
 
 }

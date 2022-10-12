@@ -67,7 +67,7 @@ public class EmployeeController {
             @RequestParam("department") Integer department,
             @RequestParam("salary") Float salary
     ) {
-        return employeeService.add(key,name, lastName,department,salary);
+        return employeeService.add(key, name, lastName, department, salary);
     }
 
 }

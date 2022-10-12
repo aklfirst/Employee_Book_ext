@@ -2,17 +2,20 @@ package com.example.employee_book_ext.domain;
 
 import java.util.Objects;
 
+import static org.springframework.util.StringUtils.capitalize;
+
 public class Employee {
     private final String firstName;
     private final String lastName;
 
     private final int department;
     private final float salary;
+    static boolean a;
 
 
     public Employee(String firstName, String lastName, int department, float salary) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = capitalize(firstName.toLowerCase());
+        this.lastName = capitalize(lastName.toLowerCase());
         this.department = department;
         this.salary = salary;
         }
@@ -36,7 +39,6 @@ public class Employee {
     public String getShortName() {
         return getFirstName().charAt(0) + "_" + getLastName();
     }
-
 
     @Override
     public String toString() {

@@ -16,7 +16,6 @@ public interface EmployeeService {
     public Optional<Employee> remove(String key) throws EmployeeNotFoundException;
 
     public Employee add(String key, String firstName, String lastName, int department, float salary) throws EmployeeAlreadyAddedException;
-
     public Optional<Employee> find(String key) throws EmployeeNotFoundException;
 
     public Optional<Employee> minSalary (int department);
